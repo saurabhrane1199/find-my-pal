@@ -11,6 +11,7 @@ import (
 
 func main() {
 	config.InitDB()
+	config.InitRedis()
 
 	r := gin.Default()
 
@@ -21,7 +22,8 @@ func main() {
 	// Protected routes
 	authRoutes := r.Group("/")
 	authRoutes.Use(middleware.AuthMiddleware())
-	authRoutes.GET("/protected", routes.ProtectedRoute)
+	authRoutes.POST("/location", routes.PostLocation)
+	authRoutes.GET("/nearby", routes.GetNearbyUsers)
 
 	r.Run(":8080") // By default, listens on 0.0.0.0:8080
 }

@@ -18,23 +18,16 @@ func StoreUserLocation(username string, lat, lon float64) error {
 }
 
 // Get nearby users within a radius (e.g., 5km)
-func GetNearbyUsers(lat, lon float64, radius float64) ([]string, error) {
-	locations, err := config.RedisClient.GeoRadius(config.Ctx, GEO_KEY, lon, lat, &redis.GeoRadiusQuery{
-		Radius:      radius,
-		Unit:        "km",
-		WithDist:    false,
-		WithCoord:   false,
-		WithGeoHash: false,
+func GetNearbyUsers(username string, radius float64) ([]string, error) {
+	locations, err := config.RedisClient.GeoSearch(config.Ctx, GEO_KEY, &redis.GeoSearchQuery{
+		Member:     username,
+		Radius:     radius,
+		RadiusUnit: "km",
+		Sort:       "ASC", // Sort by closest first
 	}).Result()
 
 	if err != nil {
 		return nil, err
 	}
-
-	usernames := make([]string, len(locations))
-	for i, loc := range locations {
-		usernames[i] = loc.Name
-	}
-
-	return usernames, nil
+	return locations, nil
 }
