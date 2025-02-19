@@ -12,6 +12,7 @@ import (
 func main() {
 	config.InitDB()
 	config.InitRedis()
+	config.InitNeo4j()
 
 	r := gin.Default()
 
@@ -24,6 +25,10 @@ func main() {
 	authRoutes.Use(middleware.AuthMiddleware())
 	authRoutes.POST("/location", routes.PostLocation)
 	authRoutes.GET("/nearby", routes.GetNearbyUsers)
+
+	authRoutes.POST("/friend/request", routes.SendFriendRequest)
+	authRoutes.POST("/friend/accept", routes.AcceptFriendRequest)
+	authRoutes.GET("/friends", routes.GetFriends)
 
 	r.Run(":8080") // By default, listens on 0.0.0.0:8080
 }
