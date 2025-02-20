@@ -2,12 +2,15 @@ package utils
 
 import (
 	"errors"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtSecret = []byte("my_secret_key")
+var jwt_secret_key = os.Getenv("SECRET_KEY")
+
+var jwtSecret = []byte(jwt_secret_key)
 
 type Claims struct {
 	Username string `json:"username"`

@@ -2,7 +2,9 @@ package config
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -11,7 +13,9 @@ var DB *sql.DB
 
 func InitDB() {
 	var err error
-	DB, err = sql.Open("postgres", "postgres://postgres:pass@localhost:5432/findmypal?sslmode=disable") //TODO
+	password := os.Getenv("DB_PASS")
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", "postgres", password, "localhost", "5432", "findmypal")
+	DB, err = sql.Open("postgres", connStr) //TODO
 	if err != nil {
 		log.Fatal("Error connecting to database:", err)
 	}

@@ -4,12 +4,20 @@ import (
 	"findmypal/config"
 	"findmypal/middleware"
 	"findmypal/routes"
+	"log"
 
 	// Built-in Go package for handling HTTP operations
 	"github.com/gin-gonic/gin" // Import the Gin framework
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Warning: No .env file found")
+	}
+
 	config.InitDB()
 	config.InitRedis()
 	config.InitNeo4j()
